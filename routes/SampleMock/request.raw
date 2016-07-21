@@ -1,0 +1,7 @@
+GET /doc/new/xyz HTTP/1.1
+Host: www.somehost.com
+Accept: Application/Json
+Accept-Language: en-us
+Content-Length: 11
+
+Hello World

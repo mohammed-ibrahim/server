@@ -59,9 +59,18 @@ class Main {
         }
 
         System.out.println("All the necessary files are present");
+        System.out.println("Reading request...");
         BufferedReader br = new BufferedReader(new FileReader(requestFile));
         HttpRequest request = new HttpRequest(br);
         br.close();
+
+        System.out.println(request.toString());
+
+        br = new BufferedReader(new FileReader(responseFile));
+        HttpResponse response = HttpResponse.fromFile(br);
+        br.close();
+
+        System.out.println(response.toString());
 
         
         return null;
