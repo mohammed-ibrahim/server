@@ -1,0 +1,4 @@
+GET /redirect-test HTTP/1.1
+Host: www.somehost.com
+Accept: Application/Json
+Accept-Language: en-us

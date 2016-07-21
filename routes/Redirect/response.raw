@@ -1,0 +1,9 @@
+HTTP/1.1 302 Moved
+Date: Thu, 20 May 2005 21:12:58 GMT
+Connection: close
+Server: rebootserver/1.0
+Accept-Ranges: Bytes
+Location: http://www.dummyurl-test-url.com
+Content-Lenghth: 12
+
+<A HREF="http://www.google.co.in/?gfe_rd=cr&amp;ei=ALCQV72HN-aGuwTmpqSACg">here</A>.
