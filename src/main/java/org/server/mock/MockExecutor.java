@@ -7,6 +7,7 @@ public class MockExecutor implements Controller {
 
     public HttpResponse process(HttpRequest request) {
 
-        return new HttpResponse(200, "working successfully");
+        HttpResponse response = (HttpResponse)request.getRouteExtendedData();
+        return response;
     }
 }

@@ -8,17 +8,31 @@ import org.reboot.server.util.*;
 import java.util.*;
 import java.io.*;
 
-class Main {
+public class Main {
     public static void main(String []args) {
+        Main m = new Main();
+        m.start(args);    
+    }
 
-        crawlTheDirectory();
+    public void start(String []args) {
+
+        List<HttpEntry> entries = crawlTheDirectory();
+
+        if (entries.size() < 1) {
+            throw new RuntimeException("No valid request/response pair(s) in the routes directory");
+        }
+
         List<Route> routes = new ArrayList<Route>();
-        routes.add(new Route("/new", Method.GET, MockExecutor.class));
+        for (HttpEntry entry: entries) {
+            routes.add(new Route(entry.request.getResource(), entry.request.getMethod(), MockExecutor.class, entry.response));
+        }
+
+        //routes.add(new Route("/new", Method.GET, MockExecutor.class));
         Server server = new Server(9899, 5, 2000, 2000, routes);
         server.startServer();
     }
 
-    public static void crawlTheDirectory() {
+    public List<HttpEntry> crawlTheDirectory() {
         List<HttpEntry> entires = new ArrayList<HttpEntry>();
 
         try {
@@ -26,15 +40,20 @@ class Main {
             for (File file : dir.listFiles()) {
                 if (file.isDirectory()) {
                     System.out.println("Found Directory: " + file.toString());
-                    checkIsValidHttpEntry(file);
+                    HttpEntry entry = checkIsValidHttpEntry(file);
+                    if (entry != null) {
+                        entires.add(entry);
+                    }
                 }
             }
         } catch (Exception e) {
             Trace.traceError(e);
         }
+
+        return entires;
     }
 
-    public static HttpEntry checkIsValidHttpEntry(File file) throws Exception {
+    public HttpEntry checkIsValidHttpEntry(File file) throws Exception {
         File requestFile = null;
         File responseFile = null;
 
@@ -72,8 +91,7 @@ class Main {
 
         System.out.println(response.toString());
 
-        
-        return null;
+        return new HttpEntry(request, response);
     }
 
     private class HttpEntry {
