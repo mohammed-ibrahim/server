@@ -16,7 +16,12 @@ public class Main {
 
     public void start(String []args) {
 
-        List<HttpEntry> entries = crawlTheDirectory();
+        if (args.length < 1) {
+            System.out.println("Please pass the routes directory in cmd-args");
+            return;
+        }
+
+        List<HttpEntry> entries = crawlTheDirectory(args[0]);
 
         if (entries.size() < 1) {
             throw new RuntimeException("No valid request/response pair(s) in the routes directory");
@@ -32,11 +37,11 @@ public class Main {
         server.startServer();
     }
 
-    public List<HttpEntry> crawlTheDirectory() {
+    public List<HttpEntry> crawlTheDirectory(String dirName) {
         List<HttpEntry> entires = new ArrayList<HttpEntry>();
 
         try {
-            File dir = new File("./routes");
+            File dir = new File(dirName);
             for (File file : dir.listFiles()) {
                 if (file.isDirectory()) {
                     System.out.println("Found Directory: " + file.toString());
@@ -83,13 +88,13 @@ public class Main {
         HttpRequest request = new HttpRequest(br);
         br.close();
 
-        System.out.println(request.toString());
+        System.out.println("Builded request: " + Serializer.getString(request));
 
         br = new BufferedReader(new FileReader(responseFile));
         HttpResponse response = HttpResponse.fromFile(br);
         br.close();
 
-        System.out.println(response.toString());
+        System.out.println("Builded response: " + Serializer.getString(response));
 
         return new HttpEntry(request, response);
     }
